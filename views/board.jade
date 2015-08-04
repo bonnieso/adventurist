@@ -1,0 +1,32 @@
+.container
+ .row
+   .col-sm-12
+      h2 Anonymous' Guide to {{city}}
+  .row
+    .col-sm-3.card-space
+      .ui.link.card(data-toggle="modal", data-target="#addModal")
+        .content.add-space
+          i.add-destination.glyphicon.glyphicon-plus
+          a.header.add-text Add a Destination
+    .col-sm-3.card-space(ng-repeat="p in placeArray")
+      .ui.card
+        .image
+          img(src='{{p.photo}}')
+        .content
+          a.header(href="{{p.url}}") {{p.name}}
+          .description
+            | {{p.address}}
+        .extra.content
+            a(ng-click="delete($index)") Delete
+#addModal.modal.fade(tabindex='-1', role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal')
+          span ×
+        h4.modal-title Add a Destination
+      .modal-body
+          form.home-search.input-group
+            input#autocomplete.form-control(ng-focus='initialize()', ng-model='addInput', type='text', placeholder='Search for a place in {{city}}')
+            span.input-group-btn
+              button.btn.btn-success(ng-click='addDestination()') Add

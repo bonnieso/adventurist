@@ -1,0 +1,85 @@
+.bg {
+  background: url(../images/traveler-amber.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100vh;
+  padding-top: 15%;
+}
+
+.home-nav {
+  background: rgba(255,255,255,0.5);
+  float: right;
+  margin-right: 10px;
+}
+
+.home-nav a {
+  color: #54B59A;
+  font-size: 2rem;
+}
+
+.home-nav a:hover, a:active, a:focus {
+  color: #C86781;
+  background: rgba(255,255,255,0) !important;
+}
+
+.home-header {
+  color: #FFFFFF;
+  font-size: 6.5rem;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  text-align: center;
+}
+
+.home-search{
+  text-align: center;
+  width: 70%;
+  margin-top: 5%;
+  margin-left: 15%;
+}
+
+.go-right{
+  text-align: right;
+}
+
+.right-space{
+  margin-right: 10px;
+}
+
+.card-space{
+  margin-top: 3%;
+}
+
+.add-destination{
+  font-size: 4rem;
+  border: 3px dashed #D4D4D5;
+  padding: 10px;
+  border-radius: 50%;
+  color: #D4D4D5;
+  margin-top: 55%;
+}
+
+.add-space{
+  text-align: center;
+  height: 60vh;
+}
+
+.add-text{
+  padding-top: 20px;
+  color: #D4D4D4 !important;
+}
+
+.pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+.modal{
+    z-index: 20;   
+}
+.modal-backdrop{
+    z-index: 10;        
+}
