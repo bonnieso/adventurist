@@ -20,28 +20,25 @@ module.exports = function(passport) {
   },
   function(req, email, password, done) { // callback with email and password from our form
     User.findOne({ 'email' :  email }, function(err, user) {
-      if (err){
+      if (err)
         return done(err);
-      }
-      if (!user){
+
+      if (!user)
         return done(null, false);
-      }
-      if (!user.validPassword(password)){
-        console.log("not valid");
+
+      if (!user.validPassword(password))
         return done(null, false);
-      }
-      else {
-        return done(null, user);
-      }
+
+      return done(null, user);
     });
   }));
 
   passport.use('local-signup', new LocalStrategy({
     usernameField : 'email',
-    passwordField : 'password'
+    passwordField : 'password',
+    passReqToCallback : true
   },
-  function(email, password, done) {
-    console.log(email);
+  function(req, email, password, done) {
     process.nextTick(function() {
       User.findOne({ 'email' :  email }, function(err, user) {
         if (err)
@@ -55,7 +52,7 @@ module.exports = function(passport) {
           newUser.password = newUser.generateHash(password);
           newUser.save(function(err) {
             if (err) {
-              console.log(err);
+              console.log(err)
               throw err;
             }
             console.log(newUser);

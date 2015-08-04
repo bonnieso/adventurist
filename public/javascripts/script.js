@@ -70,7 +70,7 @@ var app = angular.module('adventureApp', ['ui.router'])
 
     };
   })
-  .controller("indexCtrl", function ($scope, $state, cityService) {
+  .controller("indexCtrl", function ($scope, $state, $http, cityService) {
     $scope.go = function () {
       $state.go("board");
     };
@@ -80,25 +80,28 @@ var app = angular.module('adventureApp', ['ui.router'])
     $scope.adduser = function (user) {
       $http.post('/signup', user)
         .then(function (data) {
-//          $state.go('login');
+        console.log('signed up ', data);
+//          $state.go('profile');
         })
         .catch(function (err) {
           console.error(err);
         })
+      $('#signupModal').modal('hide');
     };
     
     $scope.login = function (user) {
       $http.post('/login', user)
         .then(function (data) {
-          console.log(data);
-          // $state.go('index');
+          console.log('logged in ', data);
+          // $state.go('profile');
         })
         .catch(function (err) {
           console.error(err);
         })
+      $('#loginModal').modal('hide');
     };
   })
-  .controller("boardCtrl", function ($scope, $state, cityService, $http) {
+  .controller("boardCtrl", function ($scope, cityService) {
     $scope.city = cityService.outCity;
     $scope.initialize = cityService.getLatLong();
     $scope.placeArray = [];

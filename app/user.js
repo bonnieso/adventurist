@@ -10,6 +10,10 @@ userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
+userSchema.methods.isValidPassword = function(user, password) {
+  return bcrypt.compareSync(password, user.password);
+};
+
 userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };

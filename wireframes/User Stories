@@ -1,0 +1,23 @@
+User Stories - MVP
+
+As a visitor to the site, I should be able to create an account and log in.
+As a visitor to the site, I should be able to search for a city I would like to travel to and add and delete destinations to a board.
+As a visitor to the site, I should be able to see a map view of my guide.
+As a visitor to the site, I should be able to browse guides that have been published.
+
+As a logged in user, I should be able to save a guide.
+As a logged in user, I should be able to create a new guide.
+As a logged in user, I should be able to see a map view of my guide.
+As a logged in user, I should be able to delete a guide that I created.
+As a logged in user, I should be able to view all my guides.
+As a logged in user, I should be able to update/edit my profile.
+As a logged in user, I should be able to browse other guides.
+As a logged in user, I can favorite (star) a guide.
+As a logged in user, I should be able to share my guide with others on social media.
+As a logged in user, I should be able to log out.
+
+User Stories - Beyond MVP
+
+As a logged in user, I can add (pin) destinations from other guides onto my guide.
+As a logged in user, I should be able to follow other users.
+As a logged in user, other people should be able to follow me.
