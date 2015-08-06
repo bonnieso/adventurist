@@ -3,7 +3,7 @@ var concat = require('gulp-concat');
 var jade = require('gulp-jade');
 
 gulp.task('js', function() {
-  return gulp.src('javascript/**/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest('./public/javascripts'));
 })

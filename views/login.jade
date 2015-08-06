@@ -1,16 +1,13 @@
-.col-sm-6.col-sm-offset-3
-  h1
-    span.fa.fa-sign-in
-    |  Login
-  form(ng-submit='login(user)')
-    .form-group
-      label Email
-      input.form-control(type='text', ng-model='user.email')
-    .form-group
-      label Password
-      input.form-control(type='password', ng-model='user.password')
-    button.btn.btn-warning.btn-lg(type='submit') Login
-  hr
-  p
-    | Need an account? 
-    a(ui-sref='signup') Signup
+.container  
+  .row  
+    .col-sm-6
+      form(ng-submit='login(user)')
+        .form-group
+          label Email
+          input.form-control(type='text', ng-model='user.email')
+        .form-group
+          label Password
+          input.form-control(type='password', ng-model='user.password')
+        .go-right
+          button.btn.btn-default.right-space(type='button', data-dismiss='modal') Cancel
+          button.btn.btn-info(type='submit') Log In

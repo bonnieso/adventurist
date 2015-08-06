@@ -1,0 +1,24 @@
+.container
+  .row
+    .col-sm-12.center
+      h2 {{name}}
+      h4 {{email}} / {{location}}
+      p {{bio}}
+  hr
+  .row
+    .col-sm-12
+      h2 {{name}}'s Guides
+  .row
+    .col-sm-3.card-space
+      .ui.link.card(data-toggle="modal", data-target="#guideModal")
+        .content.add-space
+          i.add-destination.glyphicon.glyphicon-plus
+          a.header.add-text Create a New Guide
+    .col-sm-3.card-space(ng-repeat="g in guideArray")
+      .ui.card
+        .image
+          img(src='{{g.photo}}')
+        .content
+          a.header(href="{{g.url}}") {{g.location}}
+        .extra.content
+            a(ng-click="delete($index)") Delete

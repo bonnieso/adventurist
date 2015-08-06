@@ -14,17 +14,96 @@ html(lang='en', ng-app='adventureApp')
     link(rel='stylesheet', href='stylesheets/style.css')
     script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&sensor=false')
 
-  body
-    ul.nav.nav-pills.home-nav
+  body(ng-controller='layoutCtrl')
+    ul.nav.nav-pills.home-nav(ng-if='!signedIn')
       li
-        a(href='#', data-toggle="modal", data-target="#signupModal" ng-click="signupclick()") Sign Up
+        a(href='#', data-toggle="modal", data-target="#signupModal") Sign Up
       li
-        a(href='#', data-toggle="modal", data-target="#loginModal") Log In
+        a(href='#', data-toggle="modal", data-target="#loginModal") Log In 
+    ul.nav.nav-pills.home-nav(ng-if='signedIn')
+      li
+        a() Browse
+      li
+        a() My Guides
+      li
+        a() Favorites
+      li
+        a(href='#', data-toggle="modal", data-target="#profileModal") Edit Profile
+      li
+        a(ng-click='logOut()') Log Out
+        
     div(ui-view)
+    #signupModal.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span ×
+            h4.modal-title Sign Up
+          .modal-body
+            // The form is placed inside the body of modal
+            form(ng-submit="adduser(user)")
+              .form-group
+                label Email
+                input.form-control(type='text', ng-model='user.email')
+              .form-group
+                label Password
+                input.form-control(type='password', ng-model='user.password')
+              .go-right
+                button.btn.btn-default.right-space(type='button', data-dismiss='modal') Cancel
+                button.btn.btn-info(type='submit') Signup
+    #loginModal.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span ×
+            h4.modal-title Login
+          .modal-body
+            // The form is placed inside the body of modal
+            form(ng-submit='login(user)')
+              .form-group
+                label Email
+                input.form-control(type='text', ng-model='user.email')
+              .form-group
+                label Password
+                input.form-control(type='password', ng-model='user.password')
+              .go-right
+                button.btn.btn-default.right-space(type='button', data-dismiss='modal') Cancel
+                button.btn.btn-info(type='submit') Log In
+    #profileModal.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal')
+              span ×
+            h4.modal-title Edit Profile
+          .modal-body
+            // The form is placed inside the body of modal
+            form(ng-submit='updateProfile(user)')
+              .form-group
+                label Name
+                input.form-control(type='text', ng-model='user.name')
+              .form-group
+                label Email
+                input.form-control(type='text', ng-model='user.email')
+              .form-group
+                label Password
+                input.form-control(type='password', ng-model='user.password')
+              .form-group
+                label Location
+                input.form-control(type='text', ng-model='user.location')
+              .form-group
+                label Bio
+                textarea.form-control(type='text', ng-model='user.bio')
+              .go-right
+                button.btn.btn-default.right-space(type='button', data-dismiss='modal') Cancel
+                button.btn.btn-info(type='submit') Update Profile
+            
     script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.0.7/semantic.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-
-    script(src="javascripts/script.js")
+    script(src="javascripts/bundle.js")
+    

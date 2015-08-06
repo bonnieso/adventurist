@@ -27,13 +27,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: 'adventuretime', resave: false, saveUninitialized: true })); // session secret
+
+app.use(session({ secret: 'adventuretime', resave: false, saveUninitialized: true, cookie: {maxAge: 60 * 60} })); // session secret
+
+require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-require('./config/passport')(passport);
-require('./routes/passport.js')(app, passport);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+require('./routes/passport.js')(app, passport);
 
 app.use('/', routes);
 app.use('/users', users);
