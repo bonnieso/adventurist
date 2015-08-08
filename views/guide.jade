@@ -1,10 +1,7 @@
 .container
   .row
     .col-sm-12
-      h2 Anonymous' Guide to {{city}}
-  .row
-    .col-sm-12.go-right
-      button.btn.btn-success(ng-click="saveGuide()") Save Guide
+      h2 {{name}}'s Guide to {{city}}
   .row
     .col-sm-3.card-space
       .ui.link.card(data-toggle="modal", data-target="#addModal")
@@ -13,14 +10,15 @@
           a.header.add-text Add a Destination
     .col-sm-3.card-space(ng-repeat="p in placeArray")
       .ui.card
-        .image
+        .image.dest-photo
           img(src='{{p.photo}}')
         .content
           a.header(href="{{p.url}}") {{p.name}}
           .description
             | {{p.address}}
         .extra.content
-            a(ng-click="delete($index)") Delete
+            i.glyphicon.glyphicon-trash
+            a(ng-click="delete($index)") &nbsp;&nbsp;Delete
 #addModal.modal.fade(tabindex='-1', role='dialog')
   .modal-dialog
     .modal-content

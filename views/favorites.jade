@@ -1,0 +1,14 @@
+.container
+  .row
+    .col-sm-12
+      h2 Browse Guides
+  .row
+    .col-sm-3.card-space(ng-repeat="g in guideArray | filter: currentUser")
+      .ui.card
+        .image
+          img(src='{{g.photo}}')
+        .content
+          a.header(href="{{g.url}}") {{g.location}}
+        .extra.content
+            i.glyphicon.glyphicon-star
+            a(ng-click="star()") Favorite

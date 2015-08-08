@@ -1,21 +1,163 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var User = require('../app/user');
+var Guide = require('../app/guide');
 var router = express.Router();
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
+router.patch('/user', function(req, res, next) {
+  console.log("backend", req.body);
+  var update = {
+    name: req.body.name,
+    location: req.body.location,
+    bio: req.body.bio
+  };
+  User.findOneAndUpdate({
+    email: req.body.email
+  }, update, {
+    new: true
+  }, function(err, updatedUser) {
+    console.log(err, updatedUser);
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Could not read user"
+      });
+    }
+    if (!updatedUser) {
+      res.status(404);
+    }
+    res.json(updatedUser);
+  });
+});
 
-router.post('/users', function() {
-  
-})
-
-router.get('/users', function() {
-  User.findOne({ email: req.user.email }, function() {
+router.get("/user", function(req, res) {
+  User.findOne({
+    _id: req.body.id
+  }).exec(function(err, user) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Could not read user"
+      });
+    }
+    if (!user) {
+      res.status(404);
+    }
     res.json(user);
-  })
-})
+  });
+});
+
+router.post('/guide', function(req, res) {
+  var guide = new Guide(req.body);
+
+  guide.location = req.body.city;
+  guide.user = req.body.user;
+
+  guide.save(function(err, savedGuide) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Validation Failed"
+      });
+    }
+    console.log("savedGuide: ", savedGuide);
+    res.json(savedGuide);
+  });
+});
+
+router.get('/allGuides', function(req, res) {
+  Guide.find({}).sort({
+    createdAt: 'desc'
+  }).limit(100).exec(function(err, guides) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Could not get guides"
+      });
+    }
+    res.json(guides);
+  });
+});
+
+router.patch('/guide/:id', function(req, res) {
+  Guide.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $push: {
+        "destinations": {
+          name: req.body.name,
+          url: req.body.url,
+          address: req.body.address,
+          photo: req.body.photo
+        }
+      }
+    }, {
+      safe: true,
+      upsert: true,
+      new: true
+    },
+    function(err, model) {
+      console.log(err);
+    }
+  );
+});
+
+router.get('/guide/:id', function(req, res) {
+  Guide.findOne({
+    _id: req.params.id
+  }).exec(function(err, guide) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Could not read guide"
+      });
+    }
+    if (!guide) {
+      res.status(404);
+    }
+    res.json(guide);
+  });
+});
+
+router.delete('/guide/:id', function(req, res) {
+  // Guide.findOneAndUpdate({
+  //     _id: req.params.id
+  //   }, {
+  //     $pull: {
+  //       "destinations": {
+  //         _id: req.body.id
+  //       }
+  //     }
+  //   }, {
+  //     safe: true,
+  //     upsert: true,
+  //     new: true
+  //   },
+  //   function(err, model) {
+  //     console.log(err);
+  //   }
+  // );
+});
+
+router.delete('/guide/:id', function(req, res) {
+  console.log(req.params.id);
+  Guide.findOneAndRemove({
+    _id: req.params.id
+  }, function(err, removedGuide) {
+    console.log(err, removedGuide);
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        error: "Could not remove guide"
+      });
+    }
+    if (!removedGuide) {
+      res.status(404);
+    }
+    res.json({
+      message: 'guide removed'
+    });
+  });
+});
 
 module.exports = router;

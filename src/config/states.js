@@ -22,9 +22,19 @@ angular.module('adventureApp')
         templateUrl: '../views/profile.html',
         controller: 'profileCtrl'
       })
-      .state('myboard', {
-        url: '/myboard',
-        templateUrl: '../views/myboard.html',
-        controller: 'myboardCtrl'
+      .state('guide', {
+        url: '/guide/:guideid',
+        templateUrl: '../views/guide.html',
+        controller: 'guideCtrl'
+      })
+      .state('browse', {
+        url: '/browse',
+        templateUrl: '../views/browse.html',
+        controller: 'browseCtrl'
+      })
+      .state('favorites', {
+        url: '/favorites',
+        templateUrl: '../views/favorites.html',
+        controller: 'favoritesCtrl'
       })
   });

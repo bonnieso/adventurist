@@ -2,23 +2,37 @@
   .row
     .col-sm-12.center
       h2 {{name}}
-      h4 {{email}} / {{location}}
-      p {{bio}}
+      h4.p-location {{location}}
+      p.p-bio {{bio}}
   hr
   .row
     .col-sm-12
-      h2 {{name}}'s Guides
+      h2 {{nameguide}}
   .row
     .col-sm-3.card-space
       .ui.link.card(data-toggle="modal", data-target="#guideModal")
         .content.add-space
-          i.add-destination.glyphicon.glyphicon-plus
-          a.header.add-text Create a New Guide
-    .col-sm-3.card-space(ng-repeat="g in guideArray")
+          i.add-guide.glyphicon.glyphicon-plus
+          a.header.add-guide-text Create a New Guide
+    .col-sm-3.card-space(ng-repeat="g in guideArray | filter: currentUser")
       .ui.card
         .image
           img(src='{{g.photo}}')
         .content
           a.header(href="{{g.url}}") {{g.location}}
         .extra.content
-            a(ng-click="delete($index)") Delete
+            i.glyphicon.glyphicon-trash
+            a(ng-click="delete(g._id)") &nbsp;&nbsp;Delete This Guide
+  #guideModal.modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal')
+            span ×
+          h4.modal-title Enter a destination
+        .modal-body
+          // The form is placed inside the body of modal
+          form.input-group
+            input#autocomplete.form-control(ng-focus='initialize()', type='text', placeholder='Enter a destination')
+            span.input-group-btn
+              button.btn.btn-success(ng-click='go()') Go

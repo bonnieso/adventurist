@@ -15,5 +15,6 @@ gulp.task('jade', function() {
 })
 
 gulp.task('default', function() {
-  gulp.watch('./views/*.jade', ['js', 'jade']);
+  gulp.watch('./views/*.jade', ['jade']);
+  gulp.watch('src/**/*.js', ['js']);
 });

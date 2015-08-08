@@ -1,8 +1,70 @@
-angular.module('adventureApp')  
-  .controller("profileCtrl", function ($scope, $state, $http, userService) {
-    $scope.name = userService.user.username;
-    $scope.email = userService.user.email;
-    $scope.location = userService.user.location;
-    $scope.bio = userService.user.bio;
-    $scope.photo = userService.user.photo;
+angular.module('adventureApp')
+  .controller("profileCtrl", function ($scope, $state, $http, cityService) {
+    $http.get('/user', {id: $scope.currentUser})
+    .then(function (resp) {
+      console.log('got user data ', resp.data);
+      $scope.name = resp.data.name;
+      $scope.nameguide = resp.data.name + "'s Guides";
+      $scope.email = resp.data.email;
+      $scope.location = resp.data.location;
+      $scope.bio = resp.data.bio;
+      // $scope.photo = resp.data.photo;
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+
+    var placePhoto = './../images/map.jpg';
+
+    $http.get('/allGuides')
+    .then(function (resp) {
+      $scope.guideData = resp.data;
+      // console.log('guide data ', Array.isArray(resp.data));
+      $scope.guideArray = $scope.guideData.map(function(item){
+        return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
+      });
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+
+    $scope.go = function () {
+      $scope.city = cityService.outCity;
+      $http.post('/guide', {city: $scope.city, user: $scope.currentUser})
+      .then(function(resp){
+        console.log('guide added ', resp);
+        $state.go("guide", { 'guideid': resp.data._id});
+        $('#guideModal').modal('hide');
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
+    };
+
+    $scope.initialize = cityService.getCity();
+
+    $scope.delete = function(id) {
+      console.log(id);
+
+      $http.delete('/guide/'+id)
+        .then(function(resp) {
+          console.log('guide removed ', resp);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+      $http.get('/allGuides')
+        .then(function (resp) {
+          $scope.guideData = resp.data;
+          // console.log('guide data ', Array.isArray(resp.data));
+          $scope.guideArray = $scope.guideData.map(function(item){
+            return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
+          });
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    };
+
+
   });
