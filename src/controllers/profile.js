@@ -1,6 +1,7 @@
 angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
-    $http.get('/user', {id: $scope.currentUser})
+    console.log($scope.currentUser);
+    $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
       console.log('got user data ', resp.data);
       $scope.name = resp.data.name;

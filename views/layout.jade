@@ -13,6 +13,8 @@ html(lang='en', ng-app='adventureApp')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.0.7/components/card.min.css')
     link(rel='stylesheet', href='stylesheets/style.css')
     script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&sensor=false')
+    script(src='javascripts/sweetalert.min.js')
+    link(rel='stylesheet', type='text/css', href='stylesheets/sweetalert.css')
 
   body(ng-controller='layoutCtrl')
     ul.nav.nav-pills.home-nav(ng-if='!signedIn')

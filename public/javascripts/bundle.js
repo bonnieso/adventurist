@@ -2,47 +2,6 @@
 
 var app = angular.module('adventureApp', ['ui.router']);
 angular.module('adventureApp')
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    $urlRouterProvider.otherwise('/')
-    $stateProvider
-      .state('index', {
-        url: '/',
-        templateUrl: '../views/index.html',
-        controller: 'indexCtrl'
-      })
-      .state('board', {
-        url: '/board',
-        templateUrl: '../views/board.html',
-        controller: 'boardCtrl'
-      })
-      .state('user', {
-        url: '/user',
-        templateUrl: '../views/user.html',
-        controller: 'userCtrl'
-      })
-      .state('profile', {
-        url: '/profile',
-        templateUrl: '../views/profile.html',
-        controller: 'profileCtrl'
-      })
-      .state('guide', {
-        url: '/guide/:guideid',
-        templateUrl: '../views/guide.html',
-        controller: 'guideCtrl'
-      })
-      .state('browse', {
-        url: '/browse',
-        templateUrl: '../views/browse.html',
-        controller: 'browseCtrl'
-      })
-      .state('favorites', {
-        url: '/favorites',
-        templateUrl: '../views/favorites.html',
-        controller: 'favoritesCtrl'
-      })
-  });
-
-angular.module('adventureApp')
   .controller("boardCtrl", function ($scope, cityService) {
     $scope.city = cityService.outCity;
     $scope.initialize = cityService.getLatLong();
@@ -128,9 +87,7 @@ angular.module('adventureApp')
         console.error(err);
       });
 
-    $http.get('/user', {
-        id: $scope.owner
-      })
+    $http.get('/user/' + $scope.currentUser)
       .then(function(resp) {
         // console.log('got user data ', resp.data);
         $scope.name = resp.data.name;
@@ -187,16 +144,25 @@ angular.module('adventureApp')
       $('#addModal').modal('hide');
     };
 
-    $scope.delete = function($index) {
+    $scope.delete = function(deleteId) {
       // $scope.placeArray.splice($index, 1);
 
-      $http.delete('/guide/' + $state.params.guideid, {id: $scope.placeArray[$index]._id})
+      $http.patch('/destination/' + $state.params.guideid, {id: deleteId})
         .then(function(resp) {
           console.log('destination removed ', resp);
         })
         .catch(function(err) {
           console.error(err);
         });
+
+        $http.get('/guide/' + $state.params.guideid)
+          .then(function(resp) {
+            console.log('got destinations ', resp);
+            $scope.placeArray = resp.data.destinations;
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
     };
 
     $scope.saveGuide = function() {
@@ -227,6 +193,7 @@ angular.module('adventureApp')
           console.error(err);
         });
       $('#signupModal').modal('hide');
+      swal("Hooray!", "You've successfully signed up! Log In to start your journey.", "success");
     };
 
     $scope.login = function (user) {
@@ -236,7 +203,7 @@ angular.module('adventureApp')
           $rootScope.currentUser = resp.data.user._id;
           $rootScope.userName = resp.data.user.name;
           $rootScope.signedIn = true;
-           $state.go('profile');
+          $state.go('user');
         })
         .catch(function (err) {
           console.error(err);
@@ -245,8 +212,8 @@ angular.module('adventureApp')
     };
 
     $scope.updateProfile = function(user){
-      console.log('testing root scope current user ', $scope.currentUser );
-      $http.patch('/user', user)
+      var updateUser = {userId: $scope.currentUser, user: user};
+      $http.patch('/user', updatedUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
         })
@@ -279,7 +246,8 @@ angular.module('adventureApp')
 
 angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
-    $http.get('/user', {id: $scope.currentUser})
+    console.log($scope.currentUser);
+    $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
       console.log('got user data ', resp.data);
       $scope.name = resp.data.name;
@@ -348,10 +316,22 @@ angular.module('adventureApp')
 
   });
 
-angular.module('adventureApp')  
+angular.module('adventureApp')
   .controller("userCtrl", function ($scope, $state, $http, userService) {
+          // console.log('testing root scope current user ', $scope.currentUser );
 
+    $scope.updateProfile = function(user){
+      var updateUser = {userId: $scope.currentUser, user: user};
+      $http.patch('/user', updateUser)
+        .then(function (resp) {
+          console.log('user updated ', resp.data);
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    };
   });
+
 angular.module('adventureApp')
   .service('cityService', function () {
     var self = this;
@@ -408,4 +388,44 @@ angular.module('adventureApp')
 angular.module('adventureApp')
   .service('userService', function () {
     this.user;
+  });
+angular.module('adventureApp')
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise('/')
+    $stateProvider
+      .state('index', {
+        url: '/',
+        templateUrl: '../views/index.html',
+        controller: 'indexCtrl'
+      })
+      .state('board', {
+        url: '/board',
+        templateUrl: '../views/board.html',
+        controller: 'boardCtrl'
+      })
+      .state('user', {
+        url: '/user',
+        templateUrl: '../views/user.html',
+        controller: 'userCtrl'
+      })
+      .state('profile', {
+        url: '/profile',
+        templateUrl: '../views/profile.html',
+        controller: 'profileCtrl'
+      })
+      .state('guide', {
+        url: '/guide/:guideid',
+        templateUrl: '../views/guide.html',
+        controller: 'guideCtrl'
+      })
+      .state('browse', {
+        url: '/browse',
+        templateUrl: '../views/browse.html',
+        controller: 'browseCtrl'
+      })
+      .state('favorites', {
+        url: '/favorites',
+        templateUrl: '../views/favorites.html',
+        controller: 'favoritesCtrl'
+      })
   });

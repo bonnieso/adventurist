@@ -9,6 +9,7 @@ angular.module('adventureApp')
           console.error(err);
         });
       $('#signupModal').modal('hide');
+      swal("Hooray!", "You've successfully signed up! Log In to start your journey.", "success");
     };
 
     $scope.login = function (user) {
@@ -18,7 +19,7 @@ angular.module('adventureApp')
           $rootScope.currentUser = resp.data.user._id;
           $rootScope.userName = resp.data.user.name;
           $rootScope.signedIn = true;
-           $state.go('profile');
+          $state.go('user');
         })
         .catch(function (err) {
           console.error(err);
@@ -27,8 +28,8 @@ angular.module('adventureApp')
     };
 
     $scope.updateProfile = function(user){
-      console.log('testing root scope current user ', $scope.currentUser );
-      $http.patch('/user', user)
+      var updateUser = {userId: $scope.currentUser, user: user};
+      $http.patch('/user', updatedUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
         })

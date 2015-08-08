@@ -18,7 +18,7 @@
             | {{p.address}}
         .extra.content
             i.glyphicon.glyphicon-trash
-            a(ng-click="delete($index)") &nbsp;&nbsp;Delete
+            a(ng-click="delete(p._id)") &nbsp;&nbsp;Delete
 #addModal.modal.fade(tabindex='-1', role='dialog')
   .modal-dialog
     .modal-content

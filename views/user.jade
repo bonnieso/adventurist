@@ -1,7 +1,10 @@
-.container  
-  .row  
-    .col-sm-6  
+.container
+  .row 
+    .col-sm-6.col-md-offset-3.user-form.well.well-lg
       form(ng-submit='updateProfile(user)')
+        .form-group
+          label Email
+          input.form-control(type='text', ng-model='user.email')
         .form-group
           label Name
           input.form-control(type='text', ng-model='user.name')
@@ -12,5 +15,4 @@
           label Bio
           textarea.form-control(type='text', ng-model='user.bio')
         .go-right
-          button.btn.btn-default.right-space(type='button', data-dismiss='modal') Cancel
           button.btn.btn-info(type='submit') Update Profile

@@ -11,9 +11,7 @@ angular.module('adventureApp')
         console.error(err);
       });
 
-    $http.get('/user', {
-        id: $scope.owner
-      })
+    $http.get('/user/' + $scope.currentUser)
       .then(function(resp) {
         // console.log('got user data ', resp.data);
         $scope.name = resp.data.name;
@@ -70,16 +68,25 @@ angular.module('adventureApp')
       $('#addModal').modal('hide');
     };
 
-    $scope.delete = function($index) {
+    $scope.delete = function(deleteId) {
       // $scope.placeArray.splice($index, 1);
 
-      $http.delete('/guide/' + $state.params.guideid, {id: $scope.placeArray[$index]._id})
+      $http.patch('/destination/' + $state.params.guideid, {id: deleteId})
         .then(function(resp) {
           console.log('destination removed ', resp);
         })
         .catch(function(err) {
           console.error(err);
         });
+
+        $http.get('/guide/' + $state.params.guideid)
+          .then(function(resp) {
+            console.log('got destinations ', resp);
+            $scope.placeArray = resp.data.destinations;
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
     };
 
     $scope.saveGuide = function() {
