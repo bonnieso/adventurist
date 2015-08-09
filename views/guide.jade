@@ -3,6 +3,11 @@
     .col-sm-12
       h2 {{name}}'s Guide to {{city}}
   .row
+    .col-sm-12.go-right
+      button.btn.btn-info(data-toggle="modal", data-target="#mapModal")
+        i.glyphicon.glyphicon-map-marker
+        span &nbsp;Map View
+  .row
     .col-sm-3.card-space
       .ui.link.card(data-toggle="modal", data-target="#addModal")
         .content.add-space
@@ -31,3 +36,12 @@
             input#autocomplete.form-control(ng-focus='initialize()', ng-model='addInput', type='text', placeholder='Search for a place in {{city}}')
             span.input-group-btn
               button.btn.btn-success(ng-click='addDestination()') Add
+#mapModal.modal.fade(tabindex='-1', role='dialog' ng-focus='mapSize()')
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal')
+          span ×
+        h4.modal-title Map View
+      .modal-body
+        #map

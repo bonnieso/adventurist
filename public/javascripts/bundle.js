@@ -2,6 +2,52 @@
 
 var app = angular.module('adventureApp', ['ui.router']);
 angular.module('adventureApp')
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    $urlRouterProvider.otherwise('/')
+    $stateProvider
+      .state('index', {
+        url: '/',
+        templateUrl: '../views/index.html',
+        controller: 'indexCtrl'
+      })
+      .state('board', {
+        url: '/board',
+        templateUrl: '../views/board.html',
+        controller: 'boardCtrl'
+      })
+      .state('user', {
+        url: '/user',
+        templateUrl: '../views/user.html',
+        controller: 'userCtrl'
+      })
+      .state('profile', {
+        url: '/profile',
+        templateUrl: '../views/profile.html',
+        controller: 'profileCtrl'
+      })
+      .state('guide', {
+        url: '/guide/:guideid',
+        templateUrl: '../views/guide.html',
+        controller: 'guideCtrl'
+      })
+      .state('browse', {
+        url: '/browse',
+        templateUrl: '../views/browse.html',
+        controller: 'browseCtrl'
+      })
+      .state('favorites', {
+        url: '/favorites',
+        templateUrl: '../views/favorites.html',
+        controller: 'favoritesCtrl'
+      })
+      .state('map', {
+        url: '/map',
+        templateUrl: '../views/map.html',
+        controller: 'mapCtrl'
+      })
+  });
+
+angular.module('adventureApp')
   .controller("boardCtrl", function ($scope, cityService) {
     $scope.city = cityService.outCity;
     $scope.initialize = cityService.getLatLong();
@@ -180,6 +226,40 @@ angular.module('adventureApp')
         });
     };
 
+    // map stuff
+    $scope.mapOptions = {
+      zoom: 12,
+      center: new google.maps.LatLng(52.520816, 13.410186),
+      mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+
+  $scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
+
+   $scope.markers = [];
+
+   var neighborhoods = [
+    new google.maps.LatLng(52.511467, 13.447179),
+    new google.maps.LatLng(52.549061, 13.422975),
+    new google.maps.LatLng(52.497622, 13.396110),
+    new google.maps.LatLng(52.517683, 13.394393)
+  ];
+
+   var createMarker = function(position){
+      $scope.markers.push(new google.maps.Marker({
+          map: $scope.map,
+          position: position,
+          animation: google.maps.Animation.DROP
+      }));
+   };
+
+  neighborhoods.forEach(createMarker);
+
+  $scope.mapSize = function(){
+    console.log('shown');
+    google.maps.event.trigger(map, "resize");
+    $scope.map.setCenter(new google.maps.LatLng(52.520816, 13.410186));
+};
+
   });
 
 angular.module('adventureApp')
@@ -243,6 +323,38 @@ angular.module('adventureApp')
     $scope.initialize = cityService.getCity();
 
   });
+
+angular.module('adventureApp')
+.controller("mapCtrl", function ($scope, $state) {
+
+  $scope.mapOptions = {
+    zoom: 12,
+    center: new google.maps.LatLng(52.520816, 13.410186),
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+};
+
+$scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
+
+ $scope.markers = [];
+
+ var neighborhoods = [
+  new google.maps.LatLng(52.511467, 13.447179),
+  new google.maps.LatLng(52.549061, 13.422975),
+  new google.maps.LatLng(52.497622, 13.396110),
+  new google.maps.LatLng(52.517683, 13.394393)
+];
+
+ var createMarker = function(position){
+    $scope.markers.push(new google.maps.Marker({
+        map: $scope.map,
+        position: position,
+        animation: google.maps.Animation.DROP
+    }));
+ };
+
+neighborhoods.forEach(createMarker);
+
+});
 
 angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
@@ -388,44 +500,4 @@ angular.module('adventureApp')
 angular.module('adventureApp')
   .service('userService', function () {
     this.user;
-  });
-angular.module('adventureApp')
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    $urlRouterProvider.otherwise('/')
-    $stateProvider
-      .state('index', {
-        url: '/',
-        templateUrl: '../views/index.html',
-        controller: 'indexCtrl'
-      })
-      .state('board', {
-        url: '/board',
-        templateUrl: '../views/board.html',
-        controller: 'boardCtrl'
-      })
-      .state('user', {
-        url: '/user',
-        templateUrl: '../views/user.html',
-        controller: 'userCtrl'
-      })
-      .state('profile', {
-        url: '/profile',
-        templateUrl: '../views/profile.html',
-        controller: 'profileCtrl'
-      })
-      .state('guide', {
-        url: '/guide/:guideid',
-        templateUrl: '../views/guide.html',
-        controller: 'guideCtrl'
-      })
-      .state('browse', {
-        url: '/browse',
-        templateUrl: '../views/browse.html',
-        controller: 'browseCtrl'
-      })
-      .state('favorites', {
-        url: '/favorites',
-        templateUrl: '../views/favorites.html',
-        controller: 'favoritesCtrl'
-      })
   });

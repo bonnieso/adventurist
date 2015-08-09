@@ -7,23 +7,19 @@
   height: 100vh;
   padding-top: 15%;
 }
-
 .home-nav {
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   float: right;
   margin-right: 10px;
 }
-
 .home-nav a {
   color: #54B59A;
   font-size: 2rem;
 }
-
 .home-nav a:hover, a:active, a:focus {
   color: #C86781;
-  background: rgba(255,255,255,0) !important;
+  background: rgba(255, 255, 255, 0) !important;
 }
-
 .home-header {
   color: #FFFFFF;
   font-size: 6.5rem;
@@ -31,94 +27,82 @@
   font-weight: 300;
   text-align: center;
 }
-
-.home-search{
+.home-search {
   text-align: center;
   width: 70%;
   margin-top: 5%;
   margin-left: 15%;
 }
-
-.go-right{
+.go-right {
   text-align: right;
 }
-
-.right-space{
+.right-space {
   margin-right: 10px;
 }
-
-.card-space{
+.card-space {
   margin-top: 3%;
 }
-
-.card-u-space{
+.card-u-space {
   margin-top: 2%;
 }
-
-.add-guide{
+.add-guide {
   font-size: 4rem;
   border: 3px dashed #D4D4D5;
   padding: 10px;
   border-radius: 50%;
   color: #D4D4D5;
   margin-top: 30%;
-
 }
-
-.add-destination{
+.add-destination {
   font-size: 4rem;
   border: 3px dashed #D4D4D5;
   padding: 10px;
   border-radius: 50%;
   color: #D4D4D5;
   margin-top: 45%;
-
 }
-
-.add-space{
+.add-space {
   text-align: center;
   height: 100%;
 }
-
-.add-text{
+.add-text {
   padding-top: 20px;
   color: #D4D4D4 !important;
   margin-bottom: 45%;
 }
-
-.add-guide-text{
+.add-guide-text {
   padding-top: 20px;
   color: #D4D4D4 !important;
   margin-bottom: 27%;
 }
-
 .pac-container {
-    background-color: #FFF;
-    z-index: 20;
-    position: fixed;
-    display: inline-block;
-    float: left;
+  background-color: #FFF;
+  z-index: 20;
+  position: fixed;
+  display: inline-block;
+  float: left;
 }
-.modal{
-    z-index: 20;
+.modal {
+  z-index: 20;
 }
-.modal-backdrop{
-    z-index: 10;
+.modal-backdrop {
+  z-index: 10;
 }
-
-.center{
+.center {
   text-align: center;
 }
-
-.p-location{
+.p-location {
   color: #A1A1A1;
 }
-
-.p-bio{
+.p-bio {
   color: #707070;
 }
-
-.user-form{
+.user-form {
   margin-top: 10%;
   background-color: #CCF0E4;
+}
+
+#map {
+ height: 75vh;
+ width:100%;
 }
