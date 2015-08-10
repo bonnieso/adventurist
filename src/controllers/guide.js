@@ -8,6 +8,7 @@ angular.module('adventureApp')
         $scope.owner = resp.data.user;
         mapService.createMap(resp.data.location, resp.data.destinations);
         $scope.map = mapService.map;
+        $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {

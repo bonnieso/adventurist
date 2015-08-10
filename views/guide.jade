@@ -21,7 +21,7 @@
           a.header(href="{{p.url}}") {{p.name}}
           .description
             | {{p.address}}
-        .extra.content
+        .extra.content(ng-if="deletable")
             i.glyphicon.glyphicon-trash
             a(ng-click="delete(p._id)") &nbsp;&nbsp;Delete
 #addModal.modal.fade(tabindex='-1', role='dialog')

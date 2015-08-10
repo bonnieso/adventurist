@@ -19,7 +19,13 @@ angular.module('adventureApp')
           $rootScope.currentUser = resp.data.user._id;
           $rootScope.userName = resp.data.user.name;
           $rootScope.signedIn = true;
-          $state.go('user');
+          if(resp.data.user.name){
+            $state.go('profile');
+          }
+          else{
+            $state.go('user');
+          }
+
         })
         .catch(function (err) {
           console.error(err);

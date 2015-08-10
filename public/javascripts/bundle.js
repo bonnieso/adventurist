@@ -130,6 +130,7 @@ angular.module('adventureApp')
         $scope.owner = resp.data.user;
         mapService.createMap(resp.data.location, resp.data.destinations);
         $scope.map = mapService.map;
+        $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {
@@ -253,7 +254,13 @@ angular.module('adventureApp')
           $rootScope.currentUser = resp.data.user._id;
           $rootScope.userName = resp.data.user.name;
           $rootScope.signedIn = true;
-          $state.go('user');
+          if(resp.data.user.name){
+            $state.go('profile');
+          }
+          else{
+            $state.go('user');
+          }
+
         })
         .catch(function (err) {
           console.error(err);
@@ -348,7 +355,6 @@ angular.module('adventureApp')
     $http.get('/allGuides')
     .then(function (resp) {
       $scope.guideData = resp.data;
-      // console.log('guide data ', Array.isArray(resp.data));
       $scope.guideArray = $scope.guideData.map(function(item){
         return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
       });
@@ -373,7 +379,6 @@ angular.module('adventureApp')
     $scope.initialize = cityService.getCity();
 
     $scope.delete = function(id) {
-      console.log(id);
 
       $http.delete('/guide/'+id)
         .then(function(resp) {
@@ -385,7 +390,6 @@ angular.module('adventureApp')
       $http.get('/allGuides')
         .then(function (resp) {
           $scope.guideData = resp.data;
-          // console.log('guide data ', Array.isArray(resp.data));
           $scope.guideArray = $scope.guideData.map(function(item){
             return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
           });
