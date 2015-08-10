@@ -6,9 +6,8 @@ angular.module('adventureApp')
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
-        mapService.createMap(resp.data.location);
+        mapService.createMap(resp.data.location, resp.data.destinations);
         $scope.map = mapService.map;
-        $scope.marker = mapService.marker;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {
@@ -18,12 +17,14 @@ angular.module('adventureApp')
             console.error(err);
           });
         //
+        $scope.mapSize = function() {
+          google.maps.event.trigger(map, "resize");
+          mapService.center(resp.data.location);
+        };
       })
       .catch(function(err) {
         console.error(err);
       });
-
-console.log('map city ', mapService.city);
 
     $scope.initialize = cityService.getLatLong();
 
@@ -105,14 +106,6 @@ console.log('map city ', mapService.city);
         .catch(function(err) {
           console.error(err);
         });
-    };
-
-//
-
-    $scope.mapSize = function() {
-      console.log('shown');
-      google.maps.event.trigger(map, "resize");
-      // mapService.map.setCenter(new google.maps.LatLng(52.520816, 13.410186));
     };
 
   });

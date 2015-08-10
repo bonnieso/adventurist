@@ -7,7 +7,7 @@ var guideSchema = mongoose.Schema({
   destinations: [{
     name: {type: String, required: true},
     url: {type: String, required: true},
-    address: {type: String, required: true},
+    address: {type: String, required: true, unique: true},
     photo: {type: String, required: true}
   }],
   location: {type: String},
