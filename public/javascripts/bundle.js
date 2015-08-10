@@ -121,30 +121,31 @@ angular.module('adventureApp')
   });
 
 angular.module('adventureApp')
-  .controller("guideCtrl", function($scope, $state, cityService, userService, $http, $stateParams) {
+  .controller("guideCtrl", function($scope, $state, cityService, userService, $http, $stateParams, mapService) {
     $http.get('/guide/' + $state.params.guideid)
       .then(function(resp) {
         console.log('got destinations ', resp);
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
+        mapService.createMap(resp.data.location);
+        $scope.map = mapService.map;
+        $scope.marker = mapService.marker;
+        //
+        $http.get('/user/' + $scope.owner)
+          .then(function(resp) {
+            $scope.name = resp.data.name;
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
+        //
       })
       .catch(function(err) {
         console.error(err);
       });
 
-    $http.get('/user/' + $scope.currentUser)
-      .then(function(resp) {
-        // console.log('got user data ', resp.data);
-        $scope.name = resp.data.name;
-        // $scope.nameguide = resp.data.name + "'s Guides";
-        // $scope.email = resp.data.email;
-        // $scope.location = resp.data.location;
-        // $scope.bio = resp.data.bio;
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
+console.log('map city ', mapService.city);
 
     $scope.initialize = cityService.getLatLong();
 
@@ -193,7 +194,9 @@ angular.module('adventureApp')
     $scope.delete = function(deleteId) {
       // $scope.placeArray.splice($index, 1);
 
-      $http.patch('/destination/' + $state.params.guideid, {id: deleteId})
+      $http.patch('/destination/' + $state.params.guideid, {
+          id: deleteId
+        })
         .then(function(resp) {
           console.log('destination removed ', resp);
         })
@@ -201,14 +204,14 @@ angular.module('adventureApp')
           console.error(err);
         });
 
-        $http.get('/guide/' + $state.params.guideid)
-          .then(function(resp) {
-            console.log('got destinations ', resp);
-            $scope.placeArray = resp.data.destinations;
-          })
-          .catch(function(err) {
-            console.error(err);
-          });
+      $http.get('/guide/' + $state.params.guideid)
+        .then(function(resp) {
+          console.log('got destinations ', resp);
+          $scope.placeArray = resp.data.destinations;
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
     };
 
     $scope.saveGuide = function() {
@@ -226,39 +229,13 @@ angular.module('adventureApp')
         });
     };
 
-    // map stuff
-    $scope.mapOptions = {
-      zoom: 12,
-      center: new google.maps.LatLng(52.520816, 13.410186),
-      mapTypeId: google.maps.MapTypeId.TERRAIN
-  };
+//
 
-  $scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
-
-   $scope.markers = [];
-
-   var neighborhoods = [
-    new google.maps.LatLng(52.511467, 13.447179),
-    new google.maps.LatLng(52.549061, 13.422975),
-    new google.maps.LatLng(52.497622, 13.396110),
-    new google.maps.LatLng(52.517683, 13.394393)
-  ];
-
-   var createMarker = function(position){
-      $scope.markers.push(new google.maps.Marker({
-          map: $scope.map,
-          position: position,
-          animation: google.maps.Animation.DROP
-      }));
-   };
-
-  neighborhoods.forEach(createMarker);
-
-  $scope.mapSize = function(){
-    console.log('shown');
-    google.maps.event.trigger(map, "resize");
-    $scope.map.setCenter(new google.maps.LatLng(52.520816, 13.410186));
-};
+    $scope.mapSize = function() {
+      console.log('shown');
+      google.maps.event.trigger(map, "resize");
+      // mapService.map.setCenter(new google.maps.LatLng(52.520816, 13.410186));
+    };
 
   });
 
@@ -497,6 +474,52 @@ angular.module('adventureApp')
       });
     };
   });
+angular.module('adventureApp')
+  .service('mapService', function () {
+    var self = this;
+    this.map;
+    this.createMap = function(location){
+      //
+      var geocoder = new google.maps.Geocoder();
+      var lat, long;
+      geocoder.geocode({
+        'address': location
+      }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          lat = results[0].geometry.location.lat();
+          long = results[0].geometry.location.lng();
+          //
+              var mapOptions = {
+                zoom: 12,
+                center: new google.maps.LatLng(lat, long)
+              };
+
+              self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+//
+              var markers = [];
+
+              var neighborhoods = [
+                new google.maps.LatLng(37.548270, -121.988572),
+                new google.maps.LatLng(37.550253, -121.980229),
+                new google.maps.LatLng(37.492366, -121.927831)
+              ];
+
+              var createMarker = function(position) {
+                markers.push(new google.maps.Marker({
+                  map: self.map,
+                  position: position,
+                  animation: google.maps.Animation.DROP
+                }));
+              };
+
+              neighborhoods.forEach(createMarker);
+        } else {
+          console.log("Error: " + status);
+        }
+      });
+  };
+  });
+
 angular.module('adventureApp')
   .service('userService', function () {
     this.user;
