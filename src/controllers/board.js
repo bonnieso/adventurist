@@ -12,7 +12,7 @@ angular.module('adventureApp')
           'maxHeight': 300
         });
       } else {
-        placePhoto = './../images/card.png';
+        placePhoto = './../images/placeholder.png';
       }
 
       var destination = {
@@ -22,7 +22,7 @@ angular.module('adventureApp')
         categories: cityService.somePlace.types.filter(exclude).join(", "),
         photo: placePhoto
       }
-      
+
       function exclude(value){
         return value !== "point_of_interest" || value !== "establishment";
       }
@@ -32,9 +32,13 @@ angular.module('adventureApp')
       $scope.addInput = "";
       $('#addModal').modal('hide');
     };
-    
+
     $scope.delete = function($index){
       $scope.placeArray.splice($index, 1);
     };
-    
+
+    $scope.promptLogin = function(){
+      swal('You must have an account to save a guide. Sign up for an account or log in.');
+    };
+
   });

@@ -9,7 +9,7 @@
     .col-sm-12
       h2 {{nameguide}}
   .row
-    .col-sm-3.card-space
+    .col-sm-3.card-space(ng-if='signedIn')
       .ui.link.card(data-toggle="modal", data-target="#guideModal")
         .content.add-space
           i.add-guide.glyphicon.glyphicon-plus
@@ -20,7 +20,7 @@
           img(src='{{g.photo}}')
         .content
           a.header(href="{{g.url}}") {{g.location}}
-        .extra.content
+        .extra.content(ng-if='signedIn')
             i.glyphicon.glyphicon-trash
             a(ng-click="delete(g._id)") &nbsp;&nbsp;Delete This Guide
   #guideModal.modal.fade(tabindex='-1', role='dialog')

@@ -35,7 +35,7 @@ angular.module('adventureApp')
 
     $scope.updateProfile = function(user){
       var updateUser = {userId: $scope.currentUser, user: user};
-      $http.patch('/user', updatedUser)
+      $http.patch('/user', updateUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
         })
