@@ -4,13 +4,16 @@
       h2 {{name}}'s Guide to {{city}}
   .row
     .col-sm-12.go-right
+      button.btn.btn-warning.right-space(ng-click='star()')
+        i.glyphicon.glyphicon-star-empty
+        span &nbsp;Add to Favorites
       button.btn.btn-info(data-toggle="modal", data-target="#mapModal")
         i.glyphicon.glyphicon-map-marker
         span &nbsp;Map View
   .row
     .col-sm-12
       #columns
-        figure.brick.add-space(ng-if='signedIn')
+        figure.brick.add-space(ng-if='addable && signedIn')
           figcaption(data-toggle="modal", data-target="#addModal")
             div
               i.add-destination.glyphicon.glyphicon-plus

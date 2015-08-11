@@ -1,15 +1,24 @@
 angular.module('adventureApp')
   .controller("favoritesCtrl", function ($scope, $http) {
-    $http.get('/allGuides')
-      .then(function (resp) {
-        $scope.guideData = resp.data;
-        // console.log('guide data ', Array.isArray(resp.data));
-        $scope.guideArray = $scope.guideData.map(function(item){
-          return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
-        });
-      })
-      .catch(function (err) {
-        console.error(err);
+    var placePhoto = './../images/map.jpg';
+
+    $http.get('/user/' + $scope.currentUser)
+    .then(function (resp) {
+      console.log('got user data ', resp.data);
+      $scope.favorites = resp.data.favorites;
+      $scope.favoritesArray = $scope.favorites.map(function(item){
+        return {
+          _id: item.id,
+          photo: placePhoto,
+          url: "/#/guide/"+item.id,
+          location: item.location,
+          guidename: item.guidename,
+          ownername: item.username
+        };
       });
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
 
   });

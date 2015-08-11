@@ -50,6 +50,8 @@ angular.module('adventureApp')
         .then(function (resp) {
           console.log('logged out', resp);
           $scope.signedIn = false;
+          $scope.userName = "";
+          $scope.currentUser = "";
           $state.go("index");
         })
         .catch(function (err) {

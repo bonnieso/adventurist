@@ -1,65 +1,6 @@
 'use strict';
 
 var app = angular.module('adventureApp', ['ui.router']);
-(function() {
-    "use strict";
-
-    angular.module('adventureApp').directive("masonry", function () {
-    var NGREPEAT_SOURCE_RE = '<!-- ngRepeat: ((.*) in ((.*?)( track by (.*))?)) -->';
-    return {
-        compile: function(element, attrs) {
-            // auto add animation to brick element
-            var animation = attrs.ngAnimate || "'masonry'";
-            var $brick = element.children();
-            $brick.attr("ng-animate", animation);
-
-            // generate item selector (exclude leaving items)
-            var type = $brick.prop('tagName');
-            var itemSelector = type+":not([class$='-leave-active'])";
-
-            return function (scope, element, attrs) {
-                var options = angular.extend({
-                    itemSelector: itemSelector
-                }, scope.$eval(attrs.masonry));
-
-                // try to infer model from ngRepeat
-                if (!options.model) {
-                    var ngRepeatMatch = element.html().match(NGREPEAT_SOURCE_RE);
-                    if (ngRepeatMatch) {
-                        options.model = ngRepeatMatch[4];
-                    }
-                }
-
-                // initial animation
-                element.addClass('masonry');
-
-                // Wait inside directives to render
-                setTimeout(function () {
-                    element.masonry(options);
-
-                    element.on("$destroy", function () {
-                        element.masonry('destroy');
-                    });
-
-                    if (options.model) {
-                        scope.$apply(function() {
-                            scope.$watchCollection(options.model, function (_new, _old) {
-                                if(_new == _old) return;
-
-                                // Wait inside directives to render
-                                setTimeout(function () {
-                                    element.masonry("reload");
-                                });
-                            });
-                        });
-                    }
-                });
-            };
-        }
-    };
-});
-})();
-
 angular.module('adventureApp')
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('/')
@@ -157,9 +98,16 @@ angular.module('adventureApp')
     $http.get('/allGuides')
       .then(function (resp) {
         $scope.guideData = resp.data;
-        // console.log('guide data ', Array.isArray(resp.data));
         $scope.guideArray = $scope.guideData.map(function(item){
-          return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
+          return {
+            _id: item._id,
+            photo: placePhoto,
+            url: "/#/guide/"+item._id,
+            location: item.location,
+            owner: item.user,
+            guidename: item.guideName,
+            ownername: item.userName
+          };
         });
       })
       .catch(function (err) {
@@ -170,17 +118,26 @@ angular.module('adventureApp')
 
 angular.module('adventureApp')
   .controller("favoritesCtrl", function ($scope, $http) {
-    $http.get('/allGuides')
-      .then(function (resp) {
-        $scope.guideData = resp.data;
-        // console.log('guide data ', Array.isArray(resp.data));
-        $scope.guideArray = $scope.guideData.map(function(item){
-          return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
-        });
-      })
-      .catch(function (err) {
-        console.error(err);
+    var placePhoto = './../images/map.jpg';
+
+    $http.get('/user/' + $scope.currentUser)
+    .then(function (resp) {
+      console.log('got user data ', resp.data);
+      $scope.favorites = resp.data.favorites;
+      $scope.favoritesArray = $scope.favorites.map(function(item){
+        return {
+          _id: item.id,
+          photo: placePhoto,
+          url: "/#/guide/"+item.id,
+          location: item.location,
+          guidename: item.guidename,
+          ownername: item.username
+        };
       });
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
 
   });
 
@@ -192,9 +149,11 @@ angular.module('adventureApp')
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
+        $scope.guidename = resp.data.guideName;
         mapService.createMap(resp.data.location, resp.data.destinations);
         $scope.map = mapService.map;
         $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
+        $scope.addable = $scope.currentUser === $scope.owner ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {
@@ -258,7 +217,6 @@ angular.module('adventureApp')
     };
 
     $scope.delete = function(deleteId) {
-      // $scope.placeArray.splice($index, 1);
 
       $http.patch('/destination/' + $state.params.guideid, {
           id: deleteId
@@ -296,7 +254,21 @@ angular.module('adventureApp')
     };
 
     //
-
+    $scope.star = function(){
+      var starred = {
+        guidename: $scope.guidename,
+        username: $scope.name,
+        location: $scope.city,
+        id: $state.params.guideid
+      };
+      $http.patch('/user/'+$scope.currentUser, starred)
+      .then(function(resp) {
+        console.log('favorite saved ', resp);
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+    };
 
   });
 
@@ -352,6 +324,8 @@ angular.module('adventureApp')
         .then(function (resp) {
           console.log('logged out', resp);
           $scope.signedIn = false;
+          $scope.userName = "";
+          $scope.currentUser = "";
           $state.go("index");
         })
         .catch(function (err) {
@@ -402,7 +376,6 @@ neighborhoods.forEach(createMarker);
 
 angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
-    console.log($scope.currentUser);
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
       console.log('got user data ', resp.data);
@@ -423,16 +396,24 @@ angular.module('adventureApp')
     .then(function (resp) {
       $scope.guideData = resp.data;
       $scope.guideArray = $scope.guideData.map(function(item){
-        return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
+        return {
+          _id: item._id,
+          photo: placePhoto,
+          url: "/#/guide/"+item._id,
+          location: item.location,
+          owner: item.user,
+          guidename: item.guideName,
+          ownername: item.userName
+        };
       });
     })
     .catch(function (err) {
       console.error(err);
     });
 
-    $scope.go = function () {
+    $scope.go = function (guide) {
       $scope.city = cityService.outCity;
-      $http.post('/guide', {city: $scope.city, user: $scope.currentUser})
+      $http.post('/guide', {city: $scope.city, user: $scope.currentUser, guidename: guide.name, username: $scope.userName})
       .then(function(resp){
         console.log('guide added ', resp);
         $state.go("guide", { 'guideid': resp.data._id});

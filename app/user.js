@@ -6,7 +6,13 @@ var userSchema = mongoose.Schema({
   location : String,
   bio : String,
   email : {type: String, required: true, unique: true},
-  password : {type: String, required: true}
+  password : {type: String, required: true},
+  favorites : [{
+    guidename: {type: String, required: true},
+    username: {type: String},
+    location: {type: String, required: true},
+    id: {type: String, required: true}
+  }]
 });
 
 userSchema.methods.generateHash = function(password) {

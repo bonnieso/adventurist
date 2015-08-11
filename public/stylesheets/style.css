@@ -46,7 +46,7 @@
   padding: 10px;
   border-radius: 50%;
   color: #D4D4D5;
-  margin-top: 25%;
+  margin-top: 40%;
 }
 .add-destination {
   font-size: 4rem;
@@ -69,7 +69,7 @@
 .add-guide-text {
   padding-top: 10px;
   color: #D4D4D4 !important;
-  margin-bottom: 30%;
+  margin-bottom: 40%;
 }
 .pac-container {
   background-color: #FFF;
@@ -93,6 +93,11 @@
 .p-bio {
   color: #707070;
 }
+
+.g-owner {
+  color: #999999;
+}
+
 .user-form {
   margin-top: 10%;
   background-color: #CCF0E4;

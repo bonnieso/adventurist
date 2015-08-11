@@ -68,6 +68,8 @@ router.post('/guide', function(req, res) {
 
   guide.location = req.body.city;
   guide.user = req.body.user;
+  guide.guideName = req.body.guidename;
+  guide.userName = req.body.username;
 
   guide.save(function(err, savedGuide) {
     if (err) {
@@ -128,6 +130,28 @@ router.patch('/destination/:id', function(req, res) {
       $pull: {
         "destinations": {
           _id: req.body.id
+        }
+      }
+    }, {
+      safe: true,
+      upsert: true
+    },
+    function(err, model) {
+      console.log(err);
+    }
+  );
+});
+
+router.patch('/user/:id', function(req, res) {
+  User.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $push: {
+        "favorites": {
+          guidename: req.body.guidename,
+          username: req.body.username,
+          location: req.body.location,
+          id: req.body.id
         }
       }
     }, {

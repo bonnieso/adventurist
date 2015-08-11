@@ -23,7 +23,9 @@
             img.photo(src='{{g.photo}}')
           figcaption
             h4
-              a.header(href="{{g.url}}") {{g.location}}
+              a(href="{{g.url}}") {{g.guidename}}
+            p.g-owner By {{g.ownername}}
+            p {{g.location}}
             .extra(ng-if='signedIn')
               i.glyphicon.glyphicon-trash
               a(ng-click="delete(g._id)") &nbsp;&nbsp;Delete This Guide
@@ -36,7 +38,12 @@
           h4.modal-title Enter a destination
         .modal-body
           // The form is placed inside the body of modal
-          form.input-group
-            input#autocomplete.form-control(ng-focus='initialize()', type='text', placeholder='Enter a destination')
-            span.input-group-btn
-              button.btn.btn-success(ng-click='go()') Go
+          form(ng-submit='go(guide)')
+            .form-group
+              label Guide Name
+              input.form-control(ng-model="guide.name", type='text', placeholder='Enter a name for your guide')
+            .form-group
+              label Destination (Search for a city, state, or country)
+              input#autocomplete.form-control(ng-focus='initialize()', type='text', placeholder='Enter a destination')
+            .go-right
+              button.btn.btn-success(type='submit') Create Guide

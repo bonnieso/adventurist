@@ -6,9 +6,11 @@ angular.module('adventureApp')
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
+        $scope.guidename = resp.data.guideName;
         mapService.createMap(resp.data.location, resp.data.destinations);
         $scope.map = mapService.map;
         $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
+        $scope.addable = $scope.currentUser === $scope.owner ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {
@@ -72,7 +74,6 @@ angular.module('adventureApp')
     };
 
     $scope.delete = function(deleteId) {
-      // $scope.placeArray.splice($index, 1);
 
       $http.patch('/destination/' + $state.params.guideid, {
           id: deleteId
@@ -110,6 +111,20 @@ angular.module('adventureApp')
     };
 
     //
-
+    $scope.star = function(){
+      var starred = {
+        guidename: $scope.guidename,
+        username: $scope.name,
+        location: $scope.city,
+        id: $state.params.guideid
+      };
+      $http.patch('/user/'+$scope.currentUser, starred)
+      .then(function(resp) {
+        console.log('favorite saved ', resp);
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+    };
 
   });

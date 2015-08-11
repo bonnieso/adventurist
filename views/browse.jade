@@ -10,7 +10,9 @@
             img.photo(src='{{g.photo}}')
           figcaption
             h4
-              a.header(href="{{g.url}}") {{g.location}}
+              a(href="{{g.url}}") {{g.guidename}}
+            p.g-owner By {{g.ownername}}
+            p {{g.location}}
             .extra(ng-if='signedIn')
               i.glyphicon.glyphicon-star-empty
               a(ng-click="star()") &nbsp; Add to Favorites

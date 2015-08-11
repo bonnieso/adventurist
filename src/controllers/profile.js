@@ -1,6 +1,5 @@
 angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
-    console.log($scope.currentUser);
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
       console.log('got user data ', resp.data);
@@ -21,16 +20,24 @@ angular.module('adventureApp')
     .then(function (resp) {
       $scope.guideData = resp.data;
       $scope.guideArray = $scope.guideData.map(function(item){
-        return {_id: item._id, photo: placePhoto, url: "/#/guide/"+item._id, location: item.location, owner: item.user};
+        return {
+          _id: item._id,
+          photo: placePhoto,
+          url: "/#/guide/"+item._id,
+          location: item.location,
+          owner: item.user,
+          guidename: item.guideName,
+          ownername: item.userName
+        };
       });
     })
     .catch(function (err) {
       console.error(err);
     });
 
-    $scope.go = function () {
+    $scope.go = function (guide) {
       $scope.city = cityService.outCity;
-      $http.post('/guide', {city: $scope.city, user: $scope.currentUser})
+      $http.post('/guide', {city: $scope.city, user: $scope.currentUser, guidename: guide.name, username: $scope.userName})
       .then(function(resp){
         console.log('guide added ', resp);
         $state.go("guide", { 'guideid': resp.data._id});
