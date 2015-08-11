@@ -46,7 +46,7 @@
   padding: 10px;
   border-radius: 50%;
   color: #D4D4D5;
-  margin-top: 20%;
+  margin-top: 25%;
 }
 .add-destination {
   font-size: 4rem;
@@ -54,22 +54,22 @@
   padding: 10px;
   border-radius: 50%;
   color: #D4D4D5;
-  margin-top: 25%;
+  margin-top: 37%;
 }
 .add-space {
   text-align: center;
   width: 100%;
   max-height: 350px;
 }
-.add-text {
-  padding-top: 20px;
+.add-destination-text {
+  padding-top: 10px;
   color: #D4D4D4 !important;
-  margin-bottom: 30%;
+  margin-bottom: 40%;
 }
 .add-guide-text {
   padding-top: 10px;
   color: #D4D4D4 !important;
-  margin-bottom: 20%;
+  margin-bottom: 30%;
 }
 .pac-container {
   background-color: #FFF;
