@@ -3,12 +3,14 @@
     .col-sm-12
       h2 Browse Guides
   .row
-    .col-sm-3.card-space(ng-repeat="g in guideArray")
-      .ui.card
-        .image
-          img(src='{{g.photo}}')
-        .content
-          a.header(href="{{g.url}}") {{g.location}}
-        .extra.content(ng-if='signedIn')
-            i.glyphicon.glyphicon-star-empty
-            a(ng-click="star()") &nbsp; Add to Favorites
+    .col-sm-12
+      #columns
+        figure.brick(ng-repeat="g in guideArray")
+          .photo-box
+            img.photo(src='{{g.photo}}')
+          figcaption
+            h4
+              a.header(href="{{g.url}}") {{g.location}}
+            .extra(ng-if='signedIn')
+              i.glyphicon.glyphicon-star-empty
+              a(ng-click="star()") &nbsp; Add to Favorites

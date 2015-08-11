@@ -112,8 +112,7 @@ router.patch('/guide/:id', function(req, res) {
       }
     }, {
       safe: true,
-      upsert: true,
-      new: true
+      upsert: true
     },
     function(err, model) {
       console.log(err);

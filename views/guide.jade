@@ -8,22 +8,25 @@
         i.glyphicon.glyphicon-map-marker
         span &nbsp;Map View
   .row
-      .col-sm-3.card-space(ng-if='signedIn')
-        .ui.link.card(data-toggle="modal", data-target="#addModal")
-          .content.add-space
-            i.add-destination.glyphicon.glyphicon-plus
-            a.header.add-text Add a Destination
-      .col-sm-3.card-space(ng-repeat="p in placeArray")
-        .ui.card
-          .image.dest-photo
-            img(src='{{p.photo}}')
-          .content
-            a.header(href="{{p.url}}" target='_blank') {{p.name}}
-            .description
-              | {{p.address}}
-          .extra.content(ng-if="deletable && signedIn")
-              i.glyphicon.glyphicon-trash
-              a(ng-click="delete(p._id)") &nbsp;&nbsp;Delete
+    .col-sm-12
+      #columns
+        figure.brick.add-space(ng-if='signedIn')
+          figcaption(data-toggle="modal", data-target="#addModal")
+            div
+              i.add-destination.glyphicon.glyphicon-plus
+            div
+              h4.add-text
+                a.add-text Add a Destination
+        figure.brick(ng-repeat="p in placeArray")
+          .photo-box
+            img.photo(src='{{p.photo}}')
+          figcaption
+            h4
+              a(href="{{p.url}}" target='_blank') {{p.name}}
+            p {{p.address}}
+            .extra(ng-if="deletable && signedIn")
+                i.glyphicon.glyphicon-trash
+                a(ng-click="delete(p._id)") &nbsp;&nbsp;Delete
 #addModal.modal.fade(tabindex='-1', role='dialog')
   .modal-dialog
     .modal-content

@@ -9,20 +9,24 @@
     .col-sm-12
       h2 {{nameguide}}
   .row
-    .col-sm-3.card-space(ng-if='signedIn')
-      .ui.link.card(data-toggle="modal", data-target="#guideModal")
-        .content.add-space
-          i.add-guide.glyphicon.glyphicon-plus
-          a.header.add-guide-text Create a New Guide
-    .col-sm-3.card-space(ng-repeat="g in guideArray | filter: currentUser")
-      .ui.card
-        .image
-          img(src='{{g.photo}}')
-        .content
-          a.header(href="{{g.url}}") {{g.location}}
-        .extra.content(ng-if='signedIn')
-            i.glyphicon.glyphicon-trash
-            a(ng-click="delete(g._id)") &nbsp;&nbsp;Delete This Guide
+    .col-sm-12
+      #columns
+        figure.brick.add-space(ng-if='signedIn')
+          figcaption(data-toggle="modal", data-target="#guideModal")
+            div
+              i.add-guide.glyphicon.glyphicon-plus
+            div
+              h4.add-guide-text
+                a.add-guide-text Create a New Guide
+        figure.brick(ng-repeat="g in guideArray | filter: currentUser")
+          .photo-box
+            img.photo(src='{{g.photo}}')
+          figcaption
+            h4
+              a.header(href="{{g.url}}") {{g.location}}
+            .extra(ng-if='signedIn')
+              i.glyphicon.glyphicon-trash
+              a(ng-click="delete(g._id)") &nbsp;&nbsp;Delete This Guide
   #guideModal.modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
