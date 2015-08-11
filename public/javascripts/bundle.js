@@ -297,6 +297,7 @@ angular.module('adventureApp')
       $http.patch('/user/'+$scope.currentUser, starred)
       .then(function(resp) {
         console.log('favorite saved ', resp);
+        swal("Hooray!", "You've successfully added" + $scope.guidename + "to your favorites list.", "success");
       })
       .catch(function(err) {
         console.error(err);
@@ -326,6 +327,7 @@ angular.module('adventureApp')
           $rootScope.currentUser = resp.data.user._id;
           $rootScope.userName = resp.data.user.name;
           $rootScope.signedIn = true;
+          $scope.user = "";
           if(resp.data.user.name){
             $state.go('profile');
           }
@@ -492,6 +494,8 @@ angular.module('adventureApp')
       $http.patch('/user', updateUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
+          $scope.userName = resp.data.name;
+          $state.go('profile');
         })
         .catch(function (err) {
           console.error(err);

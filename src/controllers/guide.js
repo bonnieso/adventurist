@@ -122,6 +122,7 @@ angular.module('adventureApp')
       $http.patch('/user/'+$scope.currentUser, starred)
       .then(function(resp) {
         console.log('favorite saved ', resp);
+        swal("Hooray!", "You've successfully added" + $scope.guidename + "to your favorites list.", "success");
       })
       .catch(function(err) {
         console.error(err);

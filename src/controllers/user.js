@@ -7,6 +7,8 @@ angular.module('adventureApp')
       $http.patch('/user', updateUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
+          $scope.userName = resp.data.name;
+          $state.go('profile');
         })
         .catch(function (err) {
           console.error(err);
