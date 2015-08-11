@@ -59,7 +59,7 @@ router.patch('/user/:id', function(req, res) {
         }
       }
     },
-    function(err, model) {
+    function(err, data) {
       console.log(err);
     }
   );
@@ -75,12 +75,11 @@ router.patch('/favorite/:id', function(req, res) {
         }
       }
     },
-    function(err, model) {
+    function(err, data) {
       console.log(err);
     }
   );
 });
-
 
 router.get('/allGuides', function(req, res) {
   Guide.find({}).sort({
@@ -145,7 +144,7 @@ router.patch('/guide/:id', function(req, res) {
         }
       }
     },
-    function(err, model) {
+    function(err, data) {
       console.log(err);
     }
   );
@@ -161,7 +160,7 @@ router.patch('/destination/:id', function(req, res) {
         }
       }
     },
-    function(err, model) {
+    function(err, data) {
       console.log(err);
     }
   );

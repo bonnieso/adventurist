@@ -37,9 +37,4 @@ angular.module('adventureApp')
         templateUrl: '../views/favorites.html',
         controller: 'favoritesCtrl'
       })
-      .state('map', {
-        url: '/map',
-        templateUrl: '../views/map.html',
-        controller: 'mapCtrl'
-      })
   });
