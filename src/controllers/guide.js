@@ -11,6 +11,7 @@ angular.module('adventureApp')
         $scope.map = mapService.map;
         $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
         $scope.addable = $scope.currentUser === $scope.owner ? true : false;
+        $scope.favoritable = $scope.currentUser !== $scope.owner ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {

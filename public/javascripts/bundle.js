@@ -139,6 +139,38 @@ angular.module('adventureApp')
       console.error(err);
     });
 
+    $scope.remove = function(deleteId) {
+
+      $http.patch('/favorite/' + $scope.currentUser, {
+          id: deleteId
+        })
+        .then(function(resp) {
+          console.log('favorite removed ', resp);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+
+        $http.get('/user/' + $scope.currentUser)
+        .then(function (resp) {
+          console.log('got user data ', resp.data);
+          $scope.favorites = resp.data.favorites;
+          $scope.favoritesArray = $scope.favorites.map(function(item){
+            return {
+              _id: item.id,
+              photo: placePhoto,
+              url: "/#/guide/"+item.id,
+              location: item.location,
+              guidename: item.guidename,
+              ownername: item.username
+            };
+          });
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    };
+
   });
 
 angular.module('adventureApp')
@@ -154,6 +186,7 @@ angular.module('adventureApp')
         $scope.map = mapService.map;
         $scope.deletable = $scope.owner === $scope.currentUser ? true : false;
         $scope.addable = $scope.currentUser === $scope.owner ? true : false;
+        $scope.favoritable = $scope.currentUser !== $scope.owner ? true : false;
         //
         $http.get('/user/' + $scope.owner)
           .then(function(resp) {

@@ -164,6 +164,25 @@ router.patch('/user/:id', function(req, res) {
   );
 });
 
+router.patch('/favorite/:id', function(req, res) {
+  User.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $pull: {
+        "favorites": {
+          _id: req.body.id
+        }
+      }
+    }, {
+      safe: true,
+      upsert: true
+    },
+    function(err, model) {
+      console.log(err);
+    }
+  );
+});
+
 router.delete('/guide/:id', function(req, res) {
   console.log(req.params.id);
   Guide.findOneAndRemove({
