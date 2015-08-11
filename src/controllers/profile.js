@@ -2,7 +2,6 @@ angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
-      console.log('got user data ', resp.data);
       $scope.name = resp.data.name;
       $scope.nameguide = resp.data.name + "'s Guides";
       $scope.email = resp.data.email;
@@ -37,9 +36,9 @@ angular.module('adventureApp')
 
     $scope.go = function (guide) {
       $scope.city = cityService.outCity;
+      console.log('this is username in profile.js ', $scope.userName);
       $http.post('/guide', {city: $scope.city, user: $scope.currentUser, guidename: guide.name, username: $scope.userName})
       .then(function(resp){
-        console.log('guide added ', resp);
         $state.go("guide", { 'guideid': resp.data._id});
         $('#guideModal').modal('hide');
       })

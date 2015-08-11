@@ -122,11 +122,10 @@ angular.module('adventureApp')
 
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
-      console.log('got user data ', resp.data);
       $scope.favorites = resp.data.favorites;
       $scope.favoritesArray = $scope.favorites.map(function(item){
         return {
-          _id: item.id,
+          _id: item._id,
           photo: placePhoto,
           url: "/#/guide/"+item.id,
           location: item.location,
@@ -153,11 +152,10 @@ angular.module('adventureApp')
 
         $http.get('/user/' + $scope.currentUser)
         .then(function (resp) {
-          console.log('got user data ', resp.data);
           $scope.favorites = resp.data.favorites;
           $scope.favoritesArray = $scope.favorites.map(function(item){
             return {
-              _id: item.id,
+              _id: item._id,
               photo: placePhoto,
               url: "/#/guide/"+item.id,
               location: item.location,
@@ -177,7 +175,6 @@ angular.module('adventureApp')
   .controller("guideCtrl", function($scope, $state, cityService, userService, $http, $stateParams, mapService) {
     $http.get('/guide/' + $state.params.guideid)
       .then(function(resp) {
-        console.log('got destinations ', resp);
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
@@ -238,7 +235,6 @@ angular.module('adventureApp')
 
       $http.get('/guide/' + $state.params.guideid)
         .then(function(resp) {
-          console.log('got destinations ', resp);
           $scope.placeArray = resp.data.destinations;
         })
         .catch(function(err) {
@@ -263,7 +259,6 @@ angular.module('adventureApp')
 
       $http.get('/guide/' + $state.params.guideid)
         .then(function(resp) {
-          console.log('got destinations ', resp);
           $scope.placeArray = resp.data.destinations;
         })
         .catch(function(err) {
@@ -297,11 +292,12 @@ angular.module('adventureApp')
       $http.patch('/user/'+$scope.currentUser, starred)
       .then(function(resp) {
         console.log('favorite saved ', resp);
-        swal("Hooray!", "You've successfully added" + $scope.guidename + "to your favorites list.", "success");
+
       })
       .catch(function(err) {
         console.error(err);
       });
+      swal("Hooray!", "A guide has been added to your favorites list.", "success");
     };
 
   });
@@ -413,7 +409,6 @@ angular.module('adventureApp')
   .controller("profileCtrl", function ($scope, $state, $http, cityService) {
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
-      console.log('got user data ', resp.data);
       $scope.name = resp.data.name;
       $scope.nameguide = resp.data.name + "'s Guides";
       $scope.email = resp.data.email;
@@ -448,9 +443,9 @@ angular.module('adventureApp')
 
     $scope.go = function (guide) {
       $scope.city = cityService.outCity;
+      console.log('this is username in profile.js ', $scope.userName);
       $http.post('/guide', {city: $scope.city, user: $scope.currentUser, guidename: guide.name, username: $scope.userName})
       .then(function(resp){
-        console.log('guide added ', resp);
         $state.go("guide", { 'guideid': resp.data._id});
         $('#guideModal').modal('hide');
       })
@@ -486,15 +481,16 @@ angular.module('adventureApp')
   });
 
 angular.module('adventureApp')
-  .controller("userCtrl", function ($scope, $state, $http, userService) {
-          // console.log('testing root scope current user ', $scope.currentUser );
+  .controller("userCtrl", function ($scope, $state, $http, userService, $rootScope) {
+
 
     $scope.updateProfile = function(user){
       var updateUser = {userId: $scope.currentUser, user: user};
       $http.patch('/user', updateUser)
         .then(function (resp) {
           console.log('user updated ', resp.data);
-          $scope.userName = resp.data.name;
+          $rootScope.userName = resp.data.name;
+          console.log('testing username in user ', $rootScope.userName );
           $state.go('profile');
         })
         .catch(function (err) {

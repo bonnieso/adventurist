@@ -5,7 +5,6 @@ var Guide = require('../app/guide');
 var router = express.Router();
 
 router.patch('/user', function(req, res, next) {
-  console.log("backend", req.body);
   var update = {
     name: req.body.user.name,
     location: req.body.user.location,
@@ -31,7 +30,6 @@ router.patch('/user', function(req, res, next) {
 });
 
 router.get("/user/:id", function(req, res) {
-  console.log(req.params.id);
   User.findOne({
     _id: req.params.id
   }).exec(function(err, user) {
@@ -46,6 +44,41 @@ router.get("/user/:id", function(req, res) {
     }
     res.json(user);
   });
+});
+
+router.patch('/user/:id', function(req, res) {
+  User.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $push: {
+        "favorites": {
+          guidename: req.body.guidename,
+          username: req.body.username,
+          location: req.body.location,
+          id: req.body.id
+        }
+      }
+    },
+    function(err, model) {
+      console.log(err);
+    }
+  );
+});
+
+router.patch('/favorite/:id', function(req, res) {
+  User.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $pull: {
+        "favorites": {
+          _id: req.body.id
+        }
+      }
+    },
+    function(err, model) {
+      console.log(err);
+    }
+  );
 });
 
 
@@ -78,7 +111,6 @@ router.post('/guide', function(req, res) {
         error: "Validation Failed"
       });
     }
-    console.log("savedGuide: ", savedGuide);
     res.json(savedGuide);
   });
 });
@@ -112,9 +144,6 @@ router.patch('/guide/:id', function(req, res) {
           photo: req.body.photo
         }
       }
-    }, {
-      safe: true,
-      upsert: true
     },
     function(err, model) {
       console.log(err);
@@ -123,7 +152,6 @@ router.patch('/guide/:id', function(req, res) {
 });
 
 router.patch('/destination/:id', function(req, res) {
-  console.log('delete destination ', req.body.id);
   Guide.findOneAndUpdate({
       _id: req.params.id
     }, {
@@ -132,50 +160,6 @@ router.patch('/destination/:id', function(req, res) {
           _id: req.body.id
         }
       }
-    }, {
-      safe: true,
-      upsert: true
-    },
-    function(err, model) {
-      console.log(err);
-    }
-  );
-});
-
-router.patch('/user/:id', function(req, res) {
-  User.findOneAndUpdate({
-      _id: req.params.id
-    }, {
-      $push: {
-        "favorites": {
-          guidename: req.body.guidename,
-          username: req.body.username,
-          location: req.body.location,
-          id: req.body.id
-        }
-      }
-    }, {
-      safe: true,
-      upsert: true
-    },
-    function(err, model) {
-      console.log(err);
-    }
-  );
-});
-
-router.patch('/favorite/:id', function(req, res) {
-  User.findOneAndUpdate({
-      _id: req.params.id
-    }, {
-      $pull: {
-        "favorites": {
-          _id: req.body.id
-        }
-      }
-    }, {
-      safe: true,
-      upsert: true
     },
     function(err, model) {
       console.log(err);
@@ -184,7 +168,6 @@ router.patch('/favorite/:id', function(req, res) {
 });
 
 router.delete('/guide/:id', function(req, res) {
-  console.log(req.params.id);
   Guide.findOneAndRemove({
     _id: req.params.id
   }, function(err, removedGuide) {

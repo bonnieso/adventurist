@@ -2,7 +2,6 @@ angular.module('adventureApp')
   .controller("guideCtrl", function($scope, $state, cityService, userService, $http, $stateParams, mapService) {
     $http.get('/guide/' + $state.params.guideid)
       .then(function(resp) {
-        console.log('got destinations ', resp);
         $scope.city = resp.data.location;
         $scope.placeArray = resp.data.destinations;
         $scope.owner = resp.data.user;
@@ -63,7 +62,6 @@ angular.module('adventureApp')
 
       $http.get('/guide/' + $state.params.guideid)
         .then(function(resp) {
-          console.log('got destinations ', resp);
           $scope.placeArray = resp.data.destinations;
         })
         .catch(function(err) {
@@ -88,7 +86,6 @@ angular.module('adventureApp')
 
       $http.get('/guide/' + $state.params.guideid)
         .then(function(resp) {
-          console.log('got destinations ', resp);
           $scope.placeArray = resp.data.destinations;
         })
         .catch(function(err) {
@@ -122,11 +119,12 @@ angular.module('adventureApp')
       $http.patch('/user/'+$scope.currentUser, starred)
       .then(function(resp) {
         console.log('favorite saved ', resp);
-        swal("Hooray!", "You've successfully added" + $scope.guidename + "to your favorites list.", "success");
+
       })
       .catch(function(err) {
         console.error(err);
       });
+      swal("Hooray!", "A guide has been added to your favorites list.", "success");
     };
 
   });

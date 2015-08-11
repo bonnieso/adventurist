@@ -4,11 +4,10 @@ angular.module('adventureApp')
 
     $http.get('/user/' + $scope.currentUser)
     .then(function (resp) {
-      console.log('got user data ', resp.data);
       $scope.favorites = resp.data.favorites;
       $scope.favoritesArray = $scope.favorites.map(function(item){
         return {
-          _id: item.id,
+          _id: item._id,
           photo: placePhoto,
           url: "/#/guide/"+item.id,
           location: item.location,
@@ -35,11 +34,10 @@ angular.module('adventureApp')
 
         $http.get('/user/' + $scope.currentUser)
         .then(function (resp) {
-          console.log('got user data ', resp.data);
           $scope.favorites = resp.data.favorites;
           $scope.favoritesArray = $scope.favorites.map(function(item){
             return {
-              _id: item.id,
+              _id: item._id,
               photo: placePhoto,
               url: "/#/guide/"+item.id,
               location: item.location,

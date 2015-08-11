@@ -1,7 +1,7 @@
 .container
   .row
     .col-sm-12
-      h2 Browse Guides
+      h2 My Favorites
   .row
     .col-sm-12
       #columns
@@ -12,7 +12,7 @@
             h4
               a(href="{{f.url}}") {{f.guidename}}
             p.g-owner By {{f.ownername}}
-            p Location: {{f.location}}
+            p {{f.location}}
             .extra(ng-if='signedIn')
               i.glyphicon.glyphicon-minus
-              a(ng-click="remove(f.id)") &nbsp;&nbsp;Remove Favorite
+              a(ng-click="remove(f._id)") &nbsp;&nbsp;Remove Favorite
